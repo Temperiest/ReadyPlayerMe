@@ -43,10 +43,9 @@ namespace Wolf3D.ReadyPlayerMe.AvatarSDK
                 this.uri = uri;
                 DownloadAvatar(uri).Run();
                 isRunning = true;
-                while (isRunning)
-                {
-                    yield return null;
-                }
+
+                yield return new WaitForSeconds(2);
+                
 
 #if !UNITY_EDITOR && UNITY_WEBGL
                 GameObject avatar = Importer.LoadFromBytes(avatarBytes, new ImportSettings() { useLegacyClips = true });
