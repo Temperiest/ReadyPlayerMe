@@ -35,13 +35,18 @@ namespace Wolf3D.ReadyPlayerMe.AvatarSDK
             // Avatar GLB model bytes in memory.
             private byte[] avatarBytes;
             private AvatarUri uri;
+            public bool isRunning = false;
 
             // Makes web request for downloading avatar model into memory and imports the model.
             protected override IEnumerator LoadAvatarAsync(AvatarUri uri)
             {
                 this.uri = uri;
-
-                yield return DownloadAvatar(uri).Run();
+                DownloadAvatar(uri).Run();
+                isRunning = true;
+                while (isRunning)
+                {
+                    yield return null;
+                }
 
 #if !UNITY_EDITOR && UNITY_WEBGL
                 GameObject avatar = Importer.LoadFromBytes(avatarBytes, new ImportSettings() { useLegacyClips = true });
@@ -73,6 +78,8 @@ namespace Wolf3D.ReadyPlayerMe.AvatarSDK
                         else
                         {
                             avatarBytes = request.downloadHandler.data;
+                            Debug.Log($"Avatar Bytes lenght {avatarBytes.Length}");
+                            isRunning = false;
                         }
                     }
                 }

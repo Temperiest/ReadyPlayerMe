@@ -194,7 +194,7 @@ namespace Wolf3D.ReadyPlayerMe.AvatarSDK
 
                     if (texture != null)
                     {
-                        texture.name = $"{AvatarPrefix}{propertyName}_{assetName}";
+                        texture.name = $"hola {AvatarPrefix}{propertyName}_{assetName}";
                     }
                 }
             }
