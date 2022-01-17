@@ -44,7 +44,10 @@ namespace Wolf3D.ReadyPlayerMe.AvatarSDK
                 DownloadAvatar(uri).Run();
                 isRunning = true;
 
-                yield return new WaitForSeconds(2);
+                while(isRunning)
+                {
+                    yield return null;
+                }
                 
 
 #if !UNITY_EDITOR && UNITY_WEBGL

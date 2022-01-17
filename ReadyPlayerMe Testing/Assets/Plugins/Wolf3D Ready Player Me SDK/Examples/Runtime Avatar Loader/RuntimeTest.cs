@@ -7,18 +7,24 @@ public class RuntimeTest : MonoBehaviour
 
     private void Start()
     {
-        Debug.Log($"Started loading avatar. [{Time.timeSinceLevelLoad:F2}]");
-        AvatarLoader avatarLoader = new AvatarLoader();
-        avatarLoader.LoadAvatar(AvatarURL, OnAvatarImported, OnAvatarLoaded);
+        Invoke("WatedStart", 1);
     }
 
     private void OnAvatarImported(GameObject avatar)
     {
+
         Debug.Log($"Avatar imported. [{Time.timeSinceLevelLoad:F2}]");
     }
 
     private void OnAvatarLoaded(GameObject avatar, AvatarMetaData metaData)
     {
         Debug.Log($"Avatar loaded. [{Time.timeSinceLevelLoad:F2}]\n\n{metaData}");
+    }
+
+    private void WaitedStart()
+    {
+        Debug.Log($"Started loading avatar. [{Time.timeSinceLevelLoad:F2}]");
+        AvatarLoader avatarLoader = new AvatarLoader();
+        avatarLoader.LoadAvatar(AvatarURL, OnAvatarImported, OnAvatarLoaded);
     }
 }

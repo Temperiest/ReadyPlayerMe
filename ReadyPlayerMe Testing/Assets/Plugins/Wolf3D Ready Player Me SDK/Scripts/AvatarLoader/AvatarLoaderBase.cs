@@ -147,6 +147,7 @@ namespace Wolf3D.ReadyPlayerMe.AvatarSDK
                     Vector3 spinePos = avatar.transform.Find(Spine).transform.position;
                     avatarMetaData.OutfitGender = (Vector3.Distance(hipsPos, spinePos) > LegacySpineDistance) ? OutfitGender.Masculine : OutfitGender.Feminine;
                 }
+                Debug.Log("No se pudieron cargar los metadatos");
             }
         }
 

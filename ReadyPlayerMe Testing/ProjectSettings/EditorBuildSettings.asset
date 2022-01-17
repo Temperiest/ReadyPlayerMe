@@ -4,5 +4,10 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
-  m_configObjects: {}
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Plugins/Wolf3D Ready Player Me SDK/Examples/Runtime Avatar Loader/RuntimeTest.unity
+    guid: bb69c446634b2d94585694a1dfcffd7e
+  m_configObjects:
+    Unity.XR.Oculus.Settings: {fileID: 11400000, guid: b32ecd27515f0814e9b2ed9def8bfbe6, type: 2}
+    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 8bbb1b7ca2661454f93114e24c598fa4, type: 2}
