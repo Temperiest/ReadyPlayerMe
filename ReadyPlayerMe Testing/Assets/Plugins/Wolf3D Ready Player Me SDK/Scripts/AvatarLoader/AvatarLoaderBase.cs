@@ -41,6 +41,8 @@ namespace Wolf3D.ReadyPlayerMe.AvatarSDK
         private const int LegacyOutfitVersion = 1;
         private const float LegacySpineDistance = 0.35f;
 
+        protected string nick;
+
         //Texture property IDs
         protected static readonly string[] ShaderProperties = new[] {
             "_MainTex",
@@ -57,10 +59,12 @@ namespace Wolf3D.ReadyPlayerMe.AvatarSDK
         /// <param name="callback">Callback method that returns reference to Avatar GameObject</param>
         public async void LoadAvatar(string url, Action<GameObject> onAvatarImported = null, Action<GameObject, AvatarMetaData> onAvatarLoaded = null)
         {
+            string[] splited = url.Split('+');
+            nick = splited[1];
             OnAvatarImported = onAvatarImported;
             OnAvatarLoaded = onAvatarLoaded;
 
-            AvatarUri uri = await new AvatarUri().Create(url);
+            AvatarUri uri = await new AvatarUri().Create(splited[0]);
             LoadAvatarAsync(uri).Run();
         }
 

@@ -20,7 +20,7 @@ namespace Wolf3D.ReadyPlayerMe.AvatarSDK
         /// <param name="url">GLB Url acquired from readyplayer.me</param>
         /// <param name="callback">Callback method that returns reference to Avatar GameObject</param>
         public void LoadAvatar(string url, Action<GameObject> onAvatarImported = null, Action<GameObject, AvatarMetaData> onAvatarLoaded = null)
-        {
+        {           
             LoadOperation operation = new LoadOperation();
             operation.Timeout = Timeout;
             operation.LoadAvatar(url, onAvatarImported, onAvatarLoaded);
@@ -34,7 +34,7 @@ namespace Wolf3D.ReadyPlayerMe.AvatarSDK
         {
             // Avatar GLB model bytes in memory.
             private byte[] avatarBytes;
-            private AvatarUri uri;
+            private AvatarUri uri;           
             public bool isRunning = false;
 
             // Makes web request for downloading avatar model into memory and imports the model.
@@ -80,7 +80,6 @@ namespace Wolf3D.ReadyPlayerMe.AvatarSDK
                         else
                         {
                             avatarBytes = request.downloadHandler.data;
-                            Debug.Log($"Avatar Bytes lenght {avatarBytes.Length}");
                             isRunning = false;
                         }
                     }
@@ -90,7 +89,7 @@ namespace Wolf3D.ReadyPlayerMe.AvatarSDK
             // GLTF Utility Callback for finished model load operation
             private void OnImportFinished(GameObject avatar)
             {
-                avatar.name = "Avatar";
+                avatar.name = "Avatar_" + nick;
                 PrepareAvatarAsync(avatar).Run();
                 OnAvatarImported?.Invoke(avatar);
             }
