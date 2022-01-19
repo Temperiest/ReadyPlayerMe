@@ -9,23 +9,29 @@ using ExitGames.Client.Photon;
 public class SpawnPlayers : MonoBehaviourPunCallbacks
 {
     public GameObject playerPrefab;
+
     // Start is called before the first frame update
     void Start()
     {
         GameObject obj = PhotonNetwork.Instantiate(playerPrefab.name, Vector3.zero, Quaternion.identity);
-        obj.name = "Avatar_" + PhotonNetwork.LocalPlayer.NickName;
+        obj.name = "Avatar_" + PhotonNetwork.LocalPlayer.NickName;//Es necesario cambiar el nickname por el UserID del login
+
+        foreach (Player p in PhotonNetwork.PlayerListOthers)
+        {
+            Debug.Log(p.NickName);
+            AvatarLoader al = new AvatarLoader();
+            al.LoadAvatar("https://d1a370nemizbjq.cloudfront.net/209a1bc2-efed-46c5-9dfd-edc8a1d9cbe4.glb" + "+" + p.NickName, AvatarImportedCallback, AvatarLoadedCallback);
+        }
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
         if (newPlayer.NickName == PhotonNetwork.LocalPlayer.NickName)
         {
-            Debug.Log("Player Entered");
             GameObject obj = PhotonNetwork.Instantiate(playerPrefab.name, Vector3.zero, Quaternion.identity);
             obj.name = "Avatar_" + newPlayer.NickName;
-        }
+        }       
     }
-
 
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, ExitGames.Client.Photon.Hashtable changedProps)
     {
@@ -42,5 +48,6 @@ public class SpawnPlayers : MonoBehaviourPunCallbacks
     {
         GameObject obj = GameObject.Find(avatar.name);
         avatar.transform.SetParent(obj.transform);
+        //Animator Sync
     }
 }
