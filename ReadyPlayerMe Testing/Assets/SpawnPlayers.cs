@@ -18,10 +18,14 @@ public class SpawnPlayers : MonoBehaviourPunCallbacks
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
-        Debug.Log("Player Entered");
-        GameObject obj = PhotonNetwork.Instantiate(playerPrefab.name, Vector3.zero, Quaternion.identity);
-        obj.name = "Avatar_" + newPlayer.NickName;     
+        if (newPlayer.NickName == PhotonNetwork.LocalPlayer.NickName)
+        {
+            Debug.Log("Player Entered");
+            GameObject obj = PhotonNetwork.Instantiate(playerPrefab.name, Vector3.zero, Quaternion.identity);
+            obj.name = "Avatar_" + newPlayer.NickName;
+        }
     }
+
 
     public override void OnPlayerPropertiesUpdate(Player targetPlayer, ExitGames.Client.Photon.Hashtable changedProps)
     {

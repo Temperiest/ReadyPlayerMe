@@ -29,8 +29,7 @@ public class RuntimeInstantiator : MonoBehaviour
 
     private void AvatarLoadedCallback(GameObject avatar, AvatarMetaData metaData)
     {
-        //ANIMATOR SYNC
-        //avatar.AddComponent<PhotonView>();
+        //ANIMATOR SYNC  
         Debug.Log("Avatar Loaded!: " + avatar.name);
     }
 

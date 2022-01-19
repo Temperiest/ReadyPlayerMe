@@ -28,7 +28,12 @@ namespace Photon.Pun
     [AddComponentMenu("Photon Networking/Photon View")]
     public class PhotonView : MonoBehaviour
     {
-        #if UNITY_EDITOR
+        private void Start()
+        {
+            gameObject.name = "Avatar_" + Owner.NickName;
+        }
+
+#if UNITY_EDITOR
         [UnityEditor.InitializeOnLoadMethod]
         private static void SetPhotonViewExecutionOrder()
         {

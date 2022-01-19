@@ -13,7 +13,6 @@ public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
 
     public void JoinRoom()
     {
-        Debug.Log(nameField.text);
         _customProperties["Nickname"] = nameField.text; //este es el nickname del USUARIO dentro de la sala
         PhotonNetwork.LocalPlayer.CustomProperties = _customProperties;
         PhotonNetwork.LocalPlayer.NickName = nameField.text;
@@ -22,7 +21,6 @@ public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
 
     public void CreateRoom()
     {
-        Debug.Log(nameField.text);
         _customProperties["Nickname"] = nameField.text; //este es el nickname del USUARIO dentro de la sala
         PhotonNetwork.LocalPlayer.CustomProperties = _customProperties;
         PhotonNetwork.LocalPlayer.NickName = nameField.text;
@@ -32,6 +30,5 @@ public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         PhotonNetwork.LoadLevel("Game");
-        Debug.Log(PhotonNetwork.LocalPlayer.NickName);
     }
 }
