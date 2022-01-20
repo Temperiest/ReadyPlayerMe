@@ -17,8 +17,11 @@ public class SpawnPlayers : MonoBehaviourPunCallbacks
 
         foreach (Player p in PhotonNetwork.PlayerListOthers)
         {
-            AvatarLoader al = new AvatarLoader();
-            al.LoadAvatar((string)p.CustomProperties["URL"], AvatarImportedCallback, AvatarLoadedCallback);
+            if (p.CustomProperties["URL"] != null)
+            {
+                AvatarLoader al = new AvatarLoader();
+                al.LoadAvatar((string)p.CustomProperties["URL"], AvatarImportedCallback, AvatarLoadedCallback);
+            }
         }
     }
 

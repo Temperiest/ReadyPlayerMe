@@ -39,7 +39,6 @@ public class LoginManager : MonoBehaviour
             DataHolder.serverData = JsonConvert.DeserializeObject<UserServerData>(request.downloadHandler.text);
             if(DataHolder.serverData.Resp.status == "OK")
             {
-
                 ChangePanels();
             }
             else
