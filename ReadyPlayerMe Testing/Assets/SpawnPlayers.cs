@@ -10,17 +10,15 @@ public class SpawnPlayers : MonoBehaviourPunCallbacks
 {
     public GameObject playerPrefab;
 
-    // Start is called before the first frame update
     void Start()
     {
         GameObject obj = PhotonNetwork.Instantiate(playerPrefab.name, Vector3.zero, Quaternion.identity);
-        obj.name = "Avatar_" + PhotonNetwork.LocalPlayer.NickName;//Es necesario cambiar el nickname por el UserID del login
+        obj.name = "Avatar_" + DataHolder.serverData.Resp.id_user;//Es necesario cambiar el nickname por el UserID del login
 
         foreach (Player p in PhotonNetwork.PlayerListOthers)
         {
-            Debug.Log(p.NickName);
             AvatarLoader al = new AvatarLoader();
-            al.LoadAvatar("https://d1a370nemizbjq.cloudfront.net/209a1bc2-efed-46c5-9dfd-edc8a1d9cbe4.glb" + "+" + p.NickName, AvatarImportedCallback, AvatarLoadedCallback);
+            al.LoadAvatar((string)p.CustomProperties["URL"], AvatarImportedCallback, AvatarLoadedCallback);
         }
     }
 
