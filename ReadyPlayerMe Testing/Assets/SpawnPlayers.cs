@@ -48,6 +48,7 @@ public class SpawnPlayers : MonoBehaviourPunCallbacks
     private void AvatarLoadedCallback(GameObject avatar, AvatarMetaData metaData)
     {
         GameObject obj = GameObject.Find(avatar.name);
+        avatar.transform.position = obj.transform.position;
         avatar.transform.SetParent(obj.transform);
         //Animator Sync
     }
