@@ -80,6 +80,7 @@ namespace Wolf3D.ReadyPlayerMe.AvatarSDK
                         else
                         {
                             avatarBytes = request.downloadHandler.data;
+                           
                             isRunning = false;
                         }
                     }
