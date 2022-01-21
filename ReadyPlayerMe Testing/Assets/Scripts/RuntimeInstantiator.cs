@@ -10,6 +10,12 @@ using Newtonsoft.Json;
 
 public class RuntimeInstantiator : MonoBehaviour
 {
+    /*
+     * Esta funcion cambia añade la propiedad URL al usuario en photon,
+     * llamando asi a la funcion onPlayerPropertiesUpdate para que el y los demas jugadores descarguen el modelo
+     * Esta funcion se encuentra aqui por motivos de prueba,
+     * Esta funcion deberia llamarse cuando el jugador entre en la sala
+     */
     public void LoadModel()
     {
         ExitGames.Client.Photon.Hashtable _customProperties = PhotonNetwork.LocalPlayer.CustomProperties;
