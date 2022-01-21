@@ -3,6 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ * Este archivo se utiliza para guardar la informacion del jugador y dar formato a los archijos JSON que entran y salen por el servidor
+ */
 public class DataHolder : MonoBehaviour
 {
     public static UserServerData serverData;

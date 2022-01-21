@@ -29,14 +29,15 @@ public class LoginManager : MonoBehaviour
         request.SetRequestHeader("Content-Type", "application/json");
 
         yield return request.SendWebRequest();
+
         if (request.error != null)
         {
             Debug.Log("Erro: " + request.error);
         }
         else
         {
-            Debug.Log("Status Code: " + request.responseCode);
             DataHolder.serverData = JsonConvert.DeserializeObject<UserServerData>(request.downloadHandler.text);
+
             if(DataHolder.serverData.Resp.status == "OK")
             {
                 ChangePanels();
