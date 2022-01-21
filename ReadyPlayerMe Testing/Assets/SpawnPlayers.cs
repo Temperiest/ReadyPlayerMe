@@ -13,7 +13,7 @@ public class SpawnPlayers : MonoBehaviourPunCallbacks
     void Start()
     {
         GameObject obj = PhotonNetwork.Instantiate(playerPrefab.name, Vector3.zero, Quaternion.identity);
-        obj.name = "Avatar_" + DataHolder.serverData.Resp.id_user;//Es necesario cambiar el nickname por el UserID del login
+        obj.name = "Avatar_" + DataHolder.serverData.Resp.id_user;
 
         foreach (Player p in PhotonNetwork.PlayerListOthers)
         {

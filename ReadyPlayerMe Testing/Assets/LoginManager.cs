@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
@@ -6,7 +7,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 
-public class LoginManager : MonoBehaviour
+public class LoginManager : MonoBehaviourPunCallbacks
 {
     public Button loginButton;
     public InputField emailField;
@@ -56,4 +57,8 @@ public class LoginManager : MonoBehaviour
         roomCanvas.SetActive(true);
     }
 
+    public override void OnJoinedRoom()
+    {
+        PhotonNetwork.LoadLevel("Game");
+    }
 }
