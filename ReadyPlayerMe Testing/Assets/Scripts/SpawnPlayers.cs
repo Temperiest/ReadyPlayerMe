@@ -69,7 +69,11 @@ public class SpawnPlayers : MonoBehaviourPunCallbacks
     private void AvatarLoadedCallback(GameObject avatar, AvatarMetaData metaData)
     {
         GameObject obj = GameObject.Find(avatar.name);
-        avatar.AddComponent<PhotonAnimatorView>();
+        PhotonAnimatorView view = avatar.AddComponent<PhotonAnimatorView>();
+        foreach( var p in view.GetSynchronizedParameters())
+        {
+            p.SynchronizeType = PhotonAnimatorView.SynchronizeType.Discrete;
+        }
         avatar.transform.position = obj.transform.position;
         avatar.transform.SetParent(obj.transform);
     }
