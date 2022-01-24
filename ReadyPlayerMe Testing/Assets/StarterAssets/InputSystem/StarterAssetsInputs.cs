@@ -12,14 +12,15 @@ namespace StarterAssets
 		public Vector2 look;
 		public bool jump;
 		public bool sprint;
+        public bool press;
 
 		[Header("Movement Settings")]
 		public bool analogMovement;
 
 #if !UNITY_IOS || !UNITY_ANDROID
 		[Header("Mouse Cursor Settings")]
-		public bool cursorLocked = true;
-		public bool cursorInputForLook = true;
+		public bool cursorLocked = false;
+		public bool cursorInputForLook = false;
 #endif
 
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
@@ -41,7 +42,12 @@ namespace StarterAssets
 			JumpInput(value.isPressed);
 		}
 
-		public void OnSprint(InputValue value)
+        public void OnPress(InputValue value)
+        {
+            PressInput(value.isPressed);
+        }
+
+        public void OnSprint(InputValue value)
 		{
 			SprintInput(value.isPressed);
 		}
@@ -69,6 +75,11 @@ namespace StarterAssets
 		{
 			sprint = newSprintState;
 		}
+
+        public void PressInput(bool newPressInput)
+        {
+            press = newPressInput;
+        }
 
 #if !UNITY_IOS || !UNITY_ANDROID
 

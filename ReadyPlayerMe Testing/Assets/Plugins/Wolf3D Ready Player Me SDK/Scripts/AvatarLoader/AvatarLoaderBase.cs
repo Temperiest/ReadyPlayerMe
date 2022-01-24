@@ -29,6 +29,7 @@ namespace Wolf3D.ReadyPlayerMe.AvatarSDK
 
         protected const string MaleAnimatorControllerName = "AnimatorControllers/MaleFullbody";
         protected const string FemaleAnimatorControllerName = "AnimatorControllers/FemaleFullbody";
+        protected const string DefaultAnimatorControllerName = "AnimatorControllers/StarterAssetsThirdPerson";
 
         // Bone names
         private const string Hips = "Hips";
@@ -108,7 +109,7 @@ namespace Wolf3D.ReadyPlayerMe.AvatarSDK
             if (avatarMetaData.IsFullbody())
             {
                 Avatar animationAvatar = Resources.Load<Avatar>(AnimationAvatarSource);
-                RuntimeAnimatorController animatorController = Resources.Load<RuntimeAnimatorController>(AnimatorControllerName);
+                RuntimeAnimatorController animatorController = Resources.Load<RuntimeAnimatorController>(DefaultAnimatorControllerName);
 
                 Animator animator = avatar.AddComponent<Animator>();
                 animator.runtimeAnimatorController = animatorController;

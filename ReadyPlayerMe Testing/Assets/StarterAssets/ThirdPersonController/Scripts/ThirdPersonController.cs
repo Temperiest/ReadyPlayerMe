@@ -25,6 +25,9 @@ namespace StarterAssets
 		[Tooltip("Acceleration and deceleration")]
 		public float SpeedChangeRate = 10.0f;
 
+        [Tooltip("Change between FPC and TPC")]
+        public bool ThirdPersonCamera = true;
+
 		[Space(10)]
 		[Tooltip("The height the player can jump")]
 		public float JumpHeight = 1.2f;
@@ -91,6 +94,8 @@ namespace StarterAssets
 
 		private bool _hasAnimator;
 
+        private Vector3 cameraOffset;
+
 		private void Awake()
 		{
 			// get a reference to our main camera
@@ -101,8 +106,7 @@ namespace StarterAssets
 		}
 
 		private void Start()
-		{
-			_hasAnimator = TryGetComponent(out _animator);
+		{		
 			_controller = GetComponent<CharacterController>();
 			_input = GetComponent<StarterAssetsInputs>();
 
@@ -115,8 +119,12 @@ namespace StarterAssets
 
 		private void Update()
 		{
-			_hasAnimator = TryGetComponent(out _animator);
-			
+            if(!_hasAnimator)
+            {
+                _animator = GetComponentInChildren<Animator>();
+                _hasAnimator = _animator;
+            }
+
 			JumpAndGravity();
 			GroundedCheck();
 			Move();
@@ -149,22 +157,44 @@ namespace StarterAssets
 			}
 		}
 
+        private void CameraPosition()
+        {
+        }
+
+        private void ChangeCameraMode()
+        {
+            if (ThirdPersonCamera)
+            {
+                _mainCamera.transform.position = transform.position + cameraOffset;
+            }
+            else
+            {
+                _mainCamera.transform.position = transform.position;
+            }
+        }
+
 		private void CameraRotation()
 		{
-			// if there is an input and camera position is not fixed
-			if (_input.look.sqrMagnitude >= _threshold && !LockCameraPosition)
-			{
-				_cinemachineTargetYaw += _input.look.x * Time.deltaTime;
-				_cinemachineTargetPitch += _input.look.y * Time.deltaTime;
-			}
+            if (ThirdPersonCamera)
+            {
+                if (_input.press)
+                {
+                    // if there is an input and camera position is not fixed
+                    if (_input.look.sqrMagnitude >= _threshold && !LockCameraPosition)
+                    {
+                        _cinemachineTargetYaw += _input.look.x * Time.deltaTime;
+                        _cinemachineTargetPitch += _input.look.y * Time.deltaTime;
+                    }
 
-			// clamp our rotations so our values are limited 360 degrees
-			_cinemachineTargetYaw = ClampAngle(_cinemachineTargetYaw, float.MinValue, float.MaxValue);
-			_cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp);
+                    // clamp our rotations so our values are limited 360 degrees
+                    _cinemachineTargetYaw = ClampAngle(_cinemachineTargetYaw, float.MinValue, float.MaxValue);
+                    _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp);
 
-			// Cinemachine will follow this target
-			CinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch + CameraAngleOverride, _cinemachineTargetYaw, 0.0f);
-		}
+                    _mainCamera.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch, _cinemachineTargetYaw, 0.0f);
+                }
+                
+            }
+        }
 
 		private void Move()
 		{
@@ -214,10 +244,12 @@ namespace StarterAssets
 			}
 
 
-			Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
+            //Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
 
-			// move the player
-			_controller.Move(targetDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
+            // move the player
+            Vector3 motion = inputDirection * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime;
+            _controller.Move(motion); 
+            _mainCamera.transform.position += (inputDirection * (_speed * Time.deltaTime));
 
 			// update animator if using character
 			if (_hasAnimator)
