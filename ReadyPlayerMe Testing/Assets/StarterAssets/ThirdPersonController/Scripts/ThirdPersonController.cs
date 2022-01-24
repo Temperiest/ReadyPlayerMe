@@ -248,7 +248,8 @@ namespace StarterAssets
 
             // move the player
             Vector3 motion = inputDirection * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime;
-            _controller.Move(motion); 
+            //_controller.Move(motion); 
+            transform.position += motion;
             _mainCamera.transform.position += (inputDirection * (_speed * Time.deltaTime));
 
 			// update animator if using character
