@@ -2,19 +2,27 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
-
-public class PlayerInitializer : MonoBehaviour
+using Photon.Realtime;
+using ExitGames.Client.Photon;
+using Cinemachine;
+public class PlayerInitializer : MonoBehaviourPunCallbacks
 {
     public float playerHeight;
     public Vector3 center;
     public float radius;
-
+    private Animator anim;
     private bool hasSyncAnims;
     // Start is called before the first frame update
+
+
     void Start()
     {
-        if(GetComponent<PhotonView>().IsMine)
+        if (GetComponent<PhotonView>().IsMine)
         {
+              ExitGames.Client.Photon.Hashtable _customProperties = PhotonNetwork.LocalPlayer.CustomProperties;
+            _customProperties["URL"] = DataHolder.serverData.Resp.url_avatar + "+" + DataHolder.serverData.Resp.id_user;
+            PhotonNetwork.LocalPlayer.SetCustomProperties(_customProperties);
+
             CharacterController controller = gameObject.AddComponent<CharacterController>();
             controller.height = playerHeight;
             controller.center = center;
@@ -24,20 +32,31 @@ public class PlayerInitializer : MonoBehaviour
         }
 
         var cinemachineVirtualCameraObject = GameObject.Find("PlayerFollowCamera");
-        cinemachineVirtualCameraObject.GetComponent<Cinemachine.CinemachineVirtualCamera>().Follow = GameObject.Find("CameraRoot").transform;
-
+        cinemachineVirtualCameraObject.GetComponent<CinemachineVirtualCamera>().Follow = GameObject.Find("CameraRoot").transform;
+        //var c = cinemachineVirtualCameraObject.GetComponent<CinemachineVirtualCamera>();
+        //c.GetCinemachineComponent<Cinemachine3rdPersonFollow>().CameraDistance = 0;
     }
 
     private void Update()
-    {
+    {       
+
         if (!hasSyncAnims)
         {
-            if (GetComponentInChildren<PhotonAnimatorView>() != null && GetComponentInChildren<PhotonAnimatorView>().GetSynchronizedParameters().Count != 0)
+            var animView = GetComponentInChildren<PhotonAnimatorView>();
+
+            if (animView != null && animView.GetSynchronizedParameters().Count != 0)
             {
-                foreach (var p in GetComponentInChildren<PhotonAnimatorView>().GetSynchronizedParameters())
+                anim = GetComponentInChildren<Animator>();
+                GetComponent<PhotonView>().FindObservables(true);
+                foreach (var p in animView.GetSynchronizedLayers())
                 {
-                    p.SynchronizeType = PhotonAnimatorView.SynchronizeType.Discrete;
+                    animView.SetLayerSynchronized(p.LayerIndex, PhotonAnimatorView.SynchronizeType.Discrete);
                 }
+                foreach (var p in animView.GetSynchronizedParameters())
+                {
+                    animView.SetParameterSynchronized(p.Name, p.Type, PhotonAnimatorView.SynchronizeType.Discrete);
+                }
+
                 hasSyncAnims = true;
             }
         }
