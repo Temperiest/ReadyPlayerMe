@@ -26,7 +26,7 @@ namespace StarterAssets
 		public float SpeedChangeRate = 15.0f;
 
         [Tooltip("Change between FPC and TPC")]
-        public bool ThirdPersonCamera = true;
+        public bool ThirdPersonCamera = false;
 
 		[Space(10)]
 		[Tooltip("The height the player can jump")]
@@ -90,7 +90,7 @@ namespace StarterAssets
 		private StarterAssetsInputs _input;
 		private GameObject _mainCamera;
 		private GameObject cameraGo;
-
+		private CinemachineVirtualCamera componentBase;
 		private const float _threshold = 0.01f;
 
 		private bool _hasAnimator;
@@ -119,13 +119,21 @@ namespace StarterAssets
 			_fallTimeoutDelta = FallTimeout;
 
 			cameraGo = GameObject.Find("PlayerFollowCamera");
-			var componentBase = cameraGo.GetComponent<CinemachineVirtualCamera>();
+			componentBase = cameraGo.GetComponent<CinemachineVirtualCamera>();
 			Debug.Log("Este es la distancia de la camara: "+ componentBase.GetCinemachineComponent<Cinemachine3rdPersonFollow>().CameraDistance);
 
+			InputActionReference refi = new InputActionReference(); 
+			refi.Set(GetComponent<PlayerInput>().actions.FindAction("Press"));
+            refi.action.performed += Action_performed;
 
 		}
 
-		private void Update()
+        private void Action_performed(InputAction.CallbackContext obj)
+		{
+				ThirdPersonCamera = !ThirdPersonCamera;
+        }
+
+        private void Update()
 		{
             if(!_hasAnimator)
             {
@@ -136,6 +144,10 @@ namespace StarterAssets
 			JumpAndGravity();
 			GroundedCheck();
 			Move();
+			ChangeCameraMode();
+
+
+
 		}
 
 		private void LateUpdate()
@@ -165,17 +177,26 @@ namespace StarterAssets
 			}
 		}
 
-      /*  private void ChangeCameraMode()
+		private void ThirdPersonCameraBoolChange()
+		{
+			if (_input.press)
+			{
+				ThirdPersonCamera = !ThirdPersonCamera;
+			}
+		}
+
+
+		private void ChangeCameraMode()
         {
             if (ThirdPersonCamera)
             {
-                _mainCamera.transform.position = transform.position + cameraOffset;
-            }
+				componentBase.GetCinemachineComponent<Cinemachine3rdPersonFollow>().CameraDistance = 0f;
+			}
             else
             {
-                _mainCamera.transform.position = transform.position;
-            }
-        }*/
+				componentBase.GetCinemachineComponent<Cinemachine3rdPersonFollow>().CameraDistance = 4f;
+			}
+        }
 
 		private void CameraRotation()
 		{
