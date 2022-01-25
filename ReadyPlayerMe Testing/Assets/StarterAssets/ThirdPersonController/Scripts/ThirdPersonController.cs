@@ -8,7 +8,6 @@ using UnityEngine.InputSystem;
 
 namespace StarterAssets
 {
-	[RequireComponent(typeof(CharacterController))]
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 	[RequireComponent(typeof(PlayerInput))]
 #endif
@@ -16,14 +15,14 @@ namespace StarterAssets
 	{
 		[Header("Player")]
 		[Tooltip("Move speed of the character in m/s")]
-		public float MoveSpeed = 2.0f;
+		public float MoveSpeed = 50.0f;
 		[Tooltip("Sprint speed of the character in m/s")]
-		public float SprintSpeed = 5.335f;
+		public float SprintSpeed = 80.335f;
 		[Tooltip("How fast the character turns to face movement direction")]
 		[Range(0.0f, 0.3f)]
 		public float RotationSmoothTime = 0.12f;
 		[Tooltip("Acceleration and deceleration")]
-		public float SpeedChangeRate = 10.0f;
+		public float SpeedChangeRate = 15.0f;
 
         [Tooltip("Change between FPC and TPC")]
         public bool ThirdPersonCamera = true;
@@ -243,10 +242,11 @@ namespace StarterAssets
             //Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
 
             // move the player
-            Vector3 motion = inputDirection * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime;
-            _controller.Move(motion);
-            transform.position = _controller.transform.position;
-            _mainCamera.transform.position += (inputDirection * (_speed * Time.deltaTime));
+            Vector3 horizontalMotion = inputDirection * (_speed * Time.deltaTime);
+            Vector3 VerticalMotion = new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime;
+            _controller.Move(VerticalMotion);
+            transform.Translate(horizontalMotion);
+            _mainCamera.transform.Translate(inputDirection * (_speed * Time.deltaTime));
 
 			// update animator if using character
 			if (_hasAnimator)
