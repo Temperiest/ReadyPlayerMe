@@ -106,6 +106,7 @@ namespace StarterAssets
 
 		private void Start()
 		{		
+			CinemachineCameraTarget = GameObject.Find("CameraRoot");
 			_controller = GetComponent<CharacterController>();
 			_input = GetComponent<StarterAssetsInputs>();
 

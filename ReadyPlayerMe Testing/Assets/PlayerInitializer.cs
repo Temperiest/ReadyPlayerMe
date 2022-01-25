@@ -22,6 +22,10 @@ public class PlayerInitializer : MonoBehaviour
             var TPC = gameObject.AddComponent<StarterAssets.ThirdPersonController>();
             TPC.GroundLayers |= (1 << LayerMask.NameToLayer("Default"));
         }
+
+        var cinemachineVirtualCameraObject = GameObject.Find("PlayerFollowCamera");
+        cinemachineVirtualCameraObject.GetComponent<Cinemachine.CinemachineVirtualCamera>().Follow = GameObject.Find("CameraRoot").transform;
+
     }
 
     private void Update()
