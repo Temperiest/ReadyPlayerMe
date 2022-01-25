@@ -8,6 +8,8 @@ public class PlayerInitializer : MonoBehaviour
     public float playerHeight;
     public Vector3 center;
     public float radius;
+
+    private bool hasSyncAnims;
     // Start is called before the first frame update
     void Start()
     {
@@ -19,6 +21,21 @@ public class PlayerInitializer : MonoBehaviour
             controller.radius = radius;
             var TPC = gameObject.AddComponent<StarterAssets.ThirdPersonController>();
             TPC.GroundLayers |= (1 << LayerMask.NameToLayer("Default"));
+        }
+    }
+
+    private void Update()
+    {
+        if (!hasSyncAnims)
+        {
+            if (GetComponentInChildren<PhotonAnimatorView>() != null && GetComponentInChildren<PhotonAnimatorView>().GetSynchronizedParameters().Count != 0)
+            {
+                foreach (var p in GetComponentInChildren<PhotonAnimatorView>().GetSynchronizedParameters())
+                {
+                    p.SynchronizeType = PhotonAnimatorView.SynchronizeType.Discrete;
+                }
+                hasSyncAnims = true;
+            }
         }
     }
 }
