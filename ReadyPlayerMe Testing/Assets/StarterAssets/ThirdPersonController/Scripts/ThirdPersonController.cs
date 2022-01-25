@@ -15,9 +15,9 @@ namespace StarterAssets
 	{
 		[Header("Player")]
 		[Tooltip("Move speed of the character in m/s")]
-		public float MoveSpeed = 100f;
+		public float MoveSpeed = 2.0f;
 		[Tooltip("Sprint speed of the character in m/s")]
-		public float SprintSpeed = 130f;
+		public float SprintSpeed = 5.335f;
 		[Tooltip("How fast the character turns to face movement direction")]
 		[Range(0.0f, 0.3f)]
 		public float RotationSmoothTime = 0.12f;
@@ -236,13 +236,13 @@ namespace StarterAssets
 
 			//Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
 
-	//Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
-//controller.Move(targetDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
+			Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
+			_controller.Move(targetDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
 			// move the player
-			Vector3 horizontalMotion = inputDirection * (_speed * Time.deltaTime);
+			/*Vector3 horizontalMotion = inputDirection * (_speed * Time.deltaTime);
             Vector3 VerticalMotion = new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime;
             _controller.Move(VerticalMotion);
-            transform.Translate(horizontalMotion);
+            transform.Translate(horizontalMotion);*/
           //  _mainCamera.transform.Translate(inputDirection * (_speed * Time.deltaTime));
 
 			// update animator if using character
