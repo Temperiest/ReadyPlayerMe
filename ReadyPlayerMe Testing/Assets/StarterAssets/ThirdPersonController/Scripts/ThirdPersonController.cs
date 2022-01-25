@@ -15,9 +15,9 @@ namespace StarterAssets
 	{
 		[Header("Player")]
 		[Tooltip("Move speed of the character in m/s")]
-		public float MoveSpeed = 50.0f;
+		public float MoveSpeed = 100f;
 		[Tooltip("Sprint speed of the character in m/s")]
-		public float SprintSpeed = 80.335f;
+		public float SprintSpeed = 130f;
 		[Tooltip("How fast the character turns to face movement direction")]
 		[Range(0.0f, 0.3f)]
 		public float RotationSmoothTime = 0.12f;
@@ -156,7 +156,7 @@ namespace StarterAssets
 			}
 		}
 
-        private void ChangeCameraMode()
+      /*  private void ChangeCameraMode()
         {
             if (ThirdPersonCamera)
             {
@@ -166,30 +166,24 @@ namespace StarterAssets
             {
                 _mainCamera.transform.position = transform.position;
             }
-        }
+        }*/
 
 		private void CameraRotation()
 		{
-            if (ThirdPersonCamera)
-            {
-                if (_input.press)
-                {
-                    // if there is an input and camera position is not fixed
-                    if (_input.look.sqrMagnitude >= _threshold && !LockCameraPosition)
-                    {
-                        _cinemachineTargetYaw += _input.look.x * Time.deltaTime;
-                        _cinemachineTargetPitch += _input.look.y * Time.deltaTime;
-                    }
+			// if there is an input and camera position is not fixed
+			if (_input.look.sqrMagnitude >= _threshold && !LockCameraPosition)
+			{
+				_cinemachineTargetYaw += _input.look.x * Time.deltaTime;
+				_cinemachineTargetPitch += _input.look.y * Time.deltaTime;
+			}
 
-                    // clamp our rotations so our values are limited 360 degrees
-                    _cinemachineTargetYaw = ClampAngle(_cinemachineTargetYaw, float.MinValue, float.MaxValue);
-                    _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp);
+			// clamp our rotations so our values are limited 360 degrees
+			_cinemachineTargetYaw = ClampAngle(_cinemachineTargetYaw, float.MinValue, float.MaxValue);
+			_cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp);
 
-                    _mainCamera.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch, _cinemachineTargetYaw, 0.0f);
-                }
-                
-            }
-        }
+			// Cinemachine will follow this target
+			CinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch + CameraAngleOverride, _cinemachineTargetYaw, 0.0f);
+		}
 
 		private void Move()
 		{
@@ -239,14 +233,16 @@ namespace StarterAssets
 			}
 
 
-            //Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
+			//Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
 
-            // move the player
-            Vector3 horizontalMotion = inputDirection * (_speed * Time.deltaTime);
+	//Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
+//controller.Move(targetDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
+			// move the player
+			Vector3 horizontalMotion = inputDirection * (_speed * Time.deltaTime);
             Vector3 VerticalMotion = new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime;
             _controller.Move(VerticalMotion);
             transform.Translate(horizontalMotion);
-            _mainCamera.transform.Translate(inputDirection * (_speed * Time.deltaTime));
+          //  _mainCamera.transform.Translate(inputDirection * (_speed * Time.deltaTime));
 
 			// update animator if using character
 			if (_hasAnimator)
