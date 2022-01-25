@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
+using Cinemachine;
 #endif
 
 /* Note: animations are called via the controller for both the character and capsule using animator null checks
@@ -88,6 +89,7 @@ namespace StarterAssets
 		private CharacterController _controller;
 		private StarterAssetsInputs _input;
 		private GameObject _mainCamera;
+		private GameObject cameraGo;
 
 		private const float _threshold = 0.01f;
 
@@ -115,6 +117,12 @@ namespace StarterAssets
 			// reset our timeouts on start
 			_jumpTimeoutDelta = JumpTimeout;
 			_fallTimeoutDelta = FallTimeout;
+
+			cameraGo = GameObject.Find("PlayerFollowCamera");
+			var componentBase = cameraGo.GetComponent<CinemachineVirtualCamera>();
+			Debug.Log("Este es la distancia de la camara: "+ componentBase.GetCinemachineComponent<Cinemachine3rdPersonFollow>().CameraDistance);
+
+
 		}
 
 		private void Update()
