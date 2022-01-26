@@ -55,7 +55,7 @@ namespace StarterAssets
 		[Tooltip("The follow target set in the Cinemachine Virtual Camera that the camera will follow")]
 		public GameObject CinemachineCameraTarget;
 		[Tooltip("How far in degrees can you move the camera up")]
-		public float TopClamp = 70.0f;
+		public float TopClamp = 60.0f;
 		[Tooltip("How far in degrees can you move the camera down")]
 		public float BottomClamp = -30.0f;
 		[Tooltip("Additional degress to override the camera. Useful for fine tuning camera position when locked")]
@@ -101,7 +101,7 @@ namespace StarterAssets
 		private bool _hasAnimator;
 
         private Vector3 cameraOffset;
-		public Vector2 distance = new Vector2(-0.4f, 6f);
+		public Vector2 distance = new Vector2(-0.45f, 6f);
 
 		private void Awake()
 		{
