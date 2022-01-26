@@ -78,6 +78,7 @@ public class SpawnPlayers : MonoBehaviourPunCallbacks
         {
             Debug.Log("e de error");
         }
+        avatar.transform.rotation = obj.transform.rotation;
         avatar.transform.position = obj.transform.position;
         avatar.transform.SetParent(obj.transform);
     }
