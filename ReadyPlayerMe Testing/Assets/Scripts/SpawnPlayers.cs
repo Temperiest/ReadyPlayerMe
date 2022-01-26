@@ -5,6 +5,7 @@ using Photon.Pun;
 using Wolf3D.ReadyPlayerMe.AvatarSDK;
 using Photon.Realtime;
 using ExitGames.Client.Photon;
+using System;
 
 public class SpawnPlayers : MonoBehaviourPunCallbacks
 {
@@ -69,9 +70,14 @@ public class SpawnPlayers : MonoBehaviourPunCallbacks
     private void AvatarLoadedCallback(GameObject avatar, AvatarMetaData metaData)
     {
         GameObject obj = GameObject.Find(avatar.name);
-
-        var animatorSync = avatar.AddComponent<PhotonAnimatorView>();
-
+        try
+        {
+            obj.GetComponent<PlayerInitializer>().hasModel = true;            
+        }
+        catch(Exception e)
+        {
+            Debug.Log("e de error");
+        }
         avatar.transform.position = obj.transform.position;
         avatar.transform.SetParent(obj.transform);
     }

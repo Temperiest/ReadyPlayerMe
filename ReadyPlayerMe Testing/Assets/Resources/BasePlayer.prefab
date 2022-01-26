@@ -52,11 +52,12 @@ MonoBehaviour:
   ObservedComponentsFoldoutOpen: 1
   Group: 0
   prefixField: -1
-  Synchronization: 3
+  Synchronization: 1
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents:
   - {fileID: 2480840772003421855}
+  - {fileID: -5803303191717282180}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -75,11 +76,11 @@ MonoBehaviour:
   m_PositionModel:
     SynchronizeEnabled: 1
     TeleportEnabled: 1
-    TeleportIfDistanceGreaterThan: 3
-    InterpolateOption: 1
+    TeleportIfDistanceGreaterThan: 6
+    InterpolateOption: 2
     InterpolateMoveTowardsSpeed: 1
     InterpolateLerpSpeed: 1
-    ExtrapolateOption: 0
+    ExtrapolateOption: 2
     ExtrapolateSpeed: 1
     ExtrapolateIncludingRoundTripTime: 1
     ExtrapolateNumberOfStoredPositions: 1
@@ -243,6 +244,9 @@ MonoBehaviour:
   playerHeight: 1.8
   center: {x: 0, y: 0.93, z: 0}
   radius: 0.28
+  anim: {fileID: 0}
+  hasSyncAnims: 0
+  hasModel: 0
 --- !u!1 &7998281692114355592
 GameObject:
   m_ObjectHideFlags: 0

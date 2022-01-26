@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections;
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
 using UnityEngine.InputSystem;
 using Cinemachine;
@@ -61,6 +62,8 @@ namespace StarterAssets
 		public float CameraAngleOverride = 0.0f;
 		[Tooltip("For locking the camera position on all axis")]
 		public bool LockCameraPosition = false;
+
+		public float lerpTime = .3f;
 
 		// cinemachine
 		private float _cinemachineTargetYaw;
@@ -133,6 +136,7 @@ namespace StarterAssets
         private void Action_performed(InputAction.CallbackContext obj)
 		{
 				ThirdPersonCamera = !ThirdPersonCamera;
+			StartCoroutine(LerpCameraPosition());
         }
 
         private void Update()
@@ -146,9 +150,6 @@ namespace StarterAssets
 			JumpAndGravity();
 			GroundedCheck();
 			Move();
-			ChangeCameraMode();
-
-
 
 		}
 
@@ -176,14 +177,6 @@ namespace StarterAssets
 			if (_hasAnimator)
 			{
 				_animator.SetBool(_animIDGrounded, Grounded);
-			}
-		}
-
-		private void ThirdPersonCameraBoolChange()
-		{
-			if (_input.press)
-			{
-				ThirdPersonCamera = !ThirdPersonCamera;
 			}
 		}
 
@@ -372,6 +365,29 @@ namespace StarterAssets
 			
 			// when selected, draw a gizmo in the position of, and matching radius of, the grounded collider
 			Gizmos.DrawSphere(new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z), GroundedRadius);
+		}
+
+		IEnumerator LerpCameraPosition()
+		{
+			var a = 0f;
+			while (a < lerpTime)
+			{
+				a += Time.deltaTime;
+
+				if (ThirdPersonCamera)
+				{
+					componentBase.GetCinemachineComponent<Cinemachine3rdPersonFollow>().CameraDistance = Mathf.Lerp(6, 0, a / lerpTime);
+					componentBase.GetCinemachineComponent<Cinemachine3rdPersonFollow>().ShoulderOffset.y = Mathf.Lerp(0.0f, 0.4f, a / lerpTime);
+				}
+				else
+				{
+					componentBase.GetCinemachineComponent<Cinemachine3rdPersonFollow>().CameraDistance = Mathf.Lerp(0, 6, a / lerpTime);
+					componentBase.GetCinemachineComponent<Cinemachine3rdPersonFollow>().ShoulderOffset.y = Mathf.Lerp(0.4f, 0f, a / lerpTime);
+				}
+
+				yield return null;
+			}
+
 		}
 	}
 }

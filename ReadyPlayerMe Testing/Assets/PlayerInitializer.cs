@@ -5,15 +5,21 @@ using Photon.Pun;
 using Photon.Realtime;
 using ExitGames.Client.Photon;
 using Cinemachine;
-public class PlayerInitializer : MonoBehaviourPunCallbacks
+public class PlayerInitializer : MonoBehaviourPunCallbacks, IPunObservable
 {
     public float playerHeight;
     public Vector3 center;
     public float radius;
-    private Animator anim;
-    private bool hasSyncAnims;
+    public Animator anim;
+    public bool hasSyncAnims = false;
+    public bool hasModel = false;
     // Start is called before the first frame update
 
+    int _animIDSpeed = Animator.StringToHash("Speed");
+	int _animIDGrounded = Animator.StringToHash("Grounded");
+	int _animIDJump = Animator.StringToHash("Jump");
+	int _animIDFreeFall = Animator.StringToHash("FreeFall");
+	int _animIDMotionSpeed = Animator.StringToHash("MotionSpeed");
 
     void Start()
     {
@@ -33,31 +39,38 @@ public class PlayerInitializer : MonoBehaviourPunCallbacks
 
         var cinemachineVirtualCameraObject = GameObject.Find("PlayerFollowCamera");
         cinemachineVirtualCameraObject.GetComponent<CinemachineVirtualCamera>().Follow = GameObject.Find("CameraRoot").transform;
-        //var c = cinemachineVirtualCameraObject.GetComponent<CinemachineVirtualCamera>();
-        //c.GetCinemachineComponent<Cinemachine3rdPersonFollow>().CameraDistance = 0;
     }
 
     private void Update()
     {       
-
-        if (!hasSyncAnims)
+        if (!hasSyncAnims && hasModel)
         {
-            var animView = GetComponentInChildren<PhotonAnimatorView>();
+            anim = GetComponentInChildren<Animator>();
+            hasSyncAnims = true;
+        }
+    }
 
-            if (animView != null && animView.GetSynchronizedParameters().Count != 0)
+    void IPunObservable.OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        if (hasModel)
+        {
+            if (stream.IsWriting)
             {
-                anim = GetComponentInChildren<Animator>();
-                GetComponent<PhotonView>().FindObservables(true);
-                foreach (var p in animView.GetSynchronizedLayers())
-                {
-                    animView.SetLayerSynchronized(p.LayerIndex, PhotonAnimatorView.SynchronizeType.Discrete);
-                }
-                foreach (var p in animView.GetSynchronizedParameters())
-                {
-                    animView.SetParameterSynchronized(p.Name, p.Type, PhotonAnimatorView.SynchronizeType.Discrete);
-                }
-
-                hasSyncAnims = true;
+                stream.SendNext(anim.GetFloat(_animIDSpeed));
+                stream.SendNext(anim.GetBool(_animIDGrounded));
+                stream.SendNext(anim.GetBool(_animIDJump));
+                stream.SendNext(anim.GetBool(_animIDFreeFall));
+                stream.SendNext(anim.GetFloat(_animIDMotionSpeed));
+                Debug.Log("enviando velocidad " + anim.GetFloat(_animIDSpeed));
+            }
+            else
+            {
+                anim.SetFloat(_animIDSpeed, (float)stream.ReceiveNext());
+                anim.SetBool(_animIDGrounded, (bool)stream.ReceiveNext());
+                anim.SetBool(_animIDJump, (bool)stream.ReceiveNext());
+                anim.SetBool(_animIDFreeFall, (bool)stream.ReceiveNext());
+                anim.SetFloat(_animIDMotionSpeed, (float)stream.ReceiveNext());
+                Debug.Log("recibiendo Speed " + anim.GetFloat(_animIDSpeed));
             }
         }
     }
