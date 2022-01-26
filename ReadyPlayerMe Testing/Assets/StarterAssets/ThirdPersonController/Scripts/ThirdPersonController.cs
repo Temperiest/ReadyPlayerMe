@@ -101,6 +101,7 @@ namespace StarterAssets
 		private bool _hasAnimator;
 
         private Vector3 cameraOffset;
+		public Vector2 distance = new Vector2(-0.4f, 6f);
 
 		private void Awake()
 		{
@@ -198,7 +199,7 @@ namespace StarterAssets
 		private void CameraRotation()
 		{
 			// if there is an input and camera position is not fixed
-			if (_input.look.sqrMagnitude >= _threshold && !LockCameraPosition)
+			if (_input.look.sqrMagnitude >= _threshold && !LockCameraPosition) 
 			{
 				_cinemachineTargetYaw += _input.look.x * Time.deltaTime;
 				_cinemachineTargetPitch += _input.look.y * Time.deltaTime;
@@ -376,12 +377,12 @@ namespace StarterAssets
 
 				if (ThirdPersonCamera)
 				{
-					componentBase.GetCinemachineComponent<Cinemachine3rdPersonFollow>().CameraDistance = Mathf.Lerp(6, 0, a / lerpTime);
+					componentBase.GetCinemachineComponent<Cinemachine3rdPersonFollow>().CameraDistance = Mathf.Lerp(distance.y, distance.x, a / lerpTime);
 					componentBase.GetCinemachineComponent<Cinemachine3rdPersonFollow>().ShoulderOffset.y = Mathf.Lerp(0.0f, 0.4f, a / lerpTime);
 				}
 				else
 				{
-					componentBase.GetCinemachineComponent<Cinemachine3rdPersonFollow>().CameraDistance = Mathf.Lerp(0, 6, a / lerpTime);
+					componentBase.GetCinemachineComponent<Cinemachine3rdPersonFollow>().CameraDistance = Mathf.Lerp(distance.x, distance.y, a / lerpTime);
 					componentBase.GetCinemachineComponent<Cinemachine3rdPersonFollow>().ShoulderOffset.y = Mathf.Lerp(0.4f, 0f, a / lerpTime);
 				}
 
