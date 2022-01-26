@@ -120,7 +120,7 @@ namespace StarterAssets
 
 			cameraGo = GameObject.Find("PlayerFollowCamera");
 			componentBase = cameraGo.GetComponent<CinemachineVirtualCamera>();
-			Debug.Log("Este es la distancia de la camara: "+ componentBase.GetCinemachineComponent<Cinemachine3rdPersonFollow>().CameraDistance);
+			componentBase.GetCinemachineComponent<Cinemachine3rdPersonFollow>().CameraDistance = 6f;
 
 			InputActionReference refi = new InputActionReference(); 
 			refi.Set(GetComponent<PlayerInput>().actions.FindAction("Press"));
@@ -194,7 +194,7 @@ namespace StarterAssets
 			}
             else
             {
-				componentBase.GetCinemachineComponent<Cinemachine3rdPersonFollow>().CameraDistance = 4f;
+				componentBase.GetCinemachineComponent<Cinemachine3rdPersonFollow>().CameraDistance = 6f;
 			}
         }
 
