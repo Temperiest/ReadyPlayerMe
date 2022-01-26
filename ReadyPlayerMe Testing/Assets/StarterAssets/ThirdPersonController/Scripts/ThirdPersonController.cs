@@ -16,7 +16,7 @@ namespace StarterAssets
 	{
 		[Header("Player")]
 		[Tooltip("Move speed of the character in m/s")]
-		public float MoveSpeed = 2.0f;
+		public float MoveSpeed = 3.0f;
 		[Tooltip("Sprint speed of the character in m/s")]
 		public float SprintSpeed = 5.335f;
 		[Tooltip("How fast the character turns to face movement direction")]
@@ -92,6 +92,8 @@ namespace StarterAssets
 		private GameObject cameraGo;
 		private CinemachineVirtualCamera componentBase;
 		private const float _threshold = 0.01f;
+
+		public float cameraShouldeOfset = 0.0f;
 
 		private bool _hasAnimator;
 
@@ -191,10 +193,12 @@ namespace StarterAssets
             if (ThirdPersonCamera)
             {
 				componentBase.GetCinemachineComponent<Cinemachine3rdPersonFollow>().CameraDistance = 0f;
+				componentBase.GetCinemachineComponent<Cinemachine3rdPersonFollow>().ShoulderOffset.y = 0.4f;
 			}
             else
             {
 				componentBase.GetCinemachineComponent<Cinemachine3rdPersonFollow>().CameraDistance = 6f;
+				componentBase.GetCinemachineComponent<Cinemachine3rdPersonFollow>().ShoulderOffset.y = 0.0f;
 			}
         }
 
