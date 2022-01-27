@@ -25,8 +25,9 @@ namespace StarterAssets
 		public float RotationSmoothTime = 0.12f;
 		[Tooltip("Acceleration and deceleration")]
 		public float SpeedChangeRate = 15.0f;
-
-        [Tooltip("Change between FPC and TPC")]
+		[Tooltip("Rotation speed of the character")]
+		public float RotationSpeed = 1.0f;
+		[Tooltip("Change between FPC and TPC")]
         public bool ThirdPersonCamera = false;
 
 		[Space(10)]
@@ -201,8 +202,8 @@ namespace StarterAssets
 			// if there is an input and camera position is not fixed
 			if (_input.look.sqrMagnitude >= _threshold && !LockCameraPosition) 
 			{
-				_cinemachineTargetYaw += _input.look.x * Time.deltaTime;
-				_cinemachineTargetPitch += _input.look.y * Time.deltaTime;
+				_cinemachineTargetYaw += _input.look.x * RotationSpeed * Time.deltaTime;
+				_cinemachineTargetPitch += _input.look.y * RotationSpeed * Time.deltaTime;
 			}
 
 			// clamp our rotations so our values are limited 360 degrees
@@ -265,12 +266,6 @@ namespace StarterAssets
 
 			Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
 			_controller.Move(targetDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
-			// move the player
-			/*Vector3 horizontalMotion = inputDirection * (_speed * Time.deltaTime);
-            Vector3 VerticalMotion = new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime;
-            _controller.Move(VerticalMotion);
-            transform.Translate(horizontalMotion);*/
-          //  _mainCamera.transform.Translate(inputDirection * (_speed * Time.deltaTime));
 
 			// update animator if using character
 			if (_hasAnimator)

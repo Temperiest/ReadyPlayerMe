@@ -227,7 +227,7 @@ MonoBehaviour:
   sprint: 0
   press: 0
   analogMovement: 0
-  cursorLocked: 0
+  cursorLocked: 1
   cursorInputForLook: 1
 --- !u!114 &-5803303191717282180
 MonoBehaviour:
