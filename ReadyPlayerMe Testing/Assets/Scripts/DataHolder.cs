@@ -52,4 +52,5 @@ public class ServerResp
     public string apellido2;
     public string email;
     public string url_avatar;
+    public string room_Name = "sala 1";
 }

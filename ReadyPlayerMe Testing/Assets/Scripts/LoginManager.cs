@@ -11,8 +11,7 @@ public class LoginManager : MonoBehaviour
     public Button loginButton;
     public InputField emailField;
     public InputField passwordField;
-    public GameObject loginCanvas;
-    public GameObject roomCanvas;
+    public CreateAndJoinRooms roomCreator;
 
     public void Login()
     {
@@ -40,21 +39,15 @@ public class LoginManager : MonoBehaviour
 
             if(DataHolder.serverData.Resp.status == "OK")
             {
-                ChangePanels();
+                roomCreator.CreateOrJoinRoom();
             }
             else
             {
-                Debug.Log("Error receiving information from the server, try again later");
+                Debug.Log("Incorrect User Data");
             }
         }
     }
 
     public void CheckButton() => loginButton.interactable = emailField.text.Length > 0 && passwordField.text.Length > 0;
     
-    public void ChangePanels()
-    {
-        loginCanvas.SetActive(false);
-        roomCanvas.SetActive(true);
-    }
-
 }

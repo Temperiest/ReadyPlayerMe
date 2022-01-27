@@ -10,13 +10,16 @@ using System;
 public class SpawnPlayers : MonoBehaviourPunCallbacks
 {
     public GameObject playerPrefab;
+    public GameObject loadingPanel;
+    public bool loaded = false;
 
-    //Esta funcion se llama al inicio de la escena
     /*
      * Cuando entro en la escena donde se encuentran todos los demas jugadores genero el avatar de cada uno de ellos
      */
     void Start()
     {
+        loadingPanel.SetActive(true);
+
         GameObject obj = PhotonNetwork.Instantiate(playerPrefab.name, Vector3.zero, Quaternion.identity);
         obj.name = "Avatar_" + DataHolder.serverData.Resp.id_user;
 
@@ -70,14 +73,14 @@ public class SpawnPlayers : MonoBehaviourPunCallbacks
     private void AvatarLoadedCallback(GameObject avatar, AvatarMetaData metaData)
     {
         GameObject obj = GameObject.Find(avatar.name);
-        try
+        if(avatar.name == "Avatar_" + PhotonNetwork.LocalPlayer.NickName)
         {
-            obj.GetComponent<PlayerInitializer>().hasModel = true;            
+            loaded = true;
+            loadingPanel.SetActive(!loaded);
         }
-        catch(Exception e)
-        {
-            Debug.Log("e de error");
-        }
+
+        obj.GetComponent<PlayerInitializer>().hasModel = true;            
+
         avatar.transform.rotation = obj.transform.rotation;
         avatar.transform.position = obj.transform.position;
         avatar.transform.SetParent(obj.transform);
