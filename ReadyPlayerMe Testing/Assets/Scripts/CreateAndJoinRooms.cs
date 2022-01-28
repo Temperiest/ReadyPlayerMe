@@ -14,7 +14,7 @@ public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
         _customProperties["Nickname"] = DataHolder.serverData.Resp.id_user;
         PhotonNetwork.LocalPlayer.CustomProperties = _customProperties;
         PhotonNetwork.LocalPlayer.NickName = DataHolder.serverData.Resp.id_user;
-        PhotonNetwork.JoinOrCreateRoom(DataHolder.serverData.Resp.room_Name, new RoomOptions(), TypedLobby.Default);
+        PhotonNetwork.JoinOrCreateRoom(DataHolder.serverData.Resp.rooms[0].nombre_room, new RoomOptions(), TypedLobby.Default);
     }
 
     public override void OnJoinedRoom()

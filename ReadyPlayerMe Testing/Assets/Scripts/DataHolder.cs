@@ -52,5 +52,14 @@ public class ServerResp
     public string apellido2;
     public string email;
     public string url_avatar;
-    public string room_Name = "sala 1";
+    public RoomData[] rooms;
+}
+
+[System.Serializable]
+public class RoomData
+{
+    public int id_room;
+    public string nombre_room;
+    public int id_apli;
+    public string nombre_apli;
 }

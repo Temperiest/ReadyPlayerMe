@@ -36,7 +36,7 @@ public class LoginManager : MonoBehaviour
         else
         {
             DataHolder.serverData = JsonConvert.DeserializeObject<UserServerData>(request.downloadHandler.text);
-
+            Debug.Log(DataHolder.serverData);
             if(DataHolder.serverData.Resp.status == "OK")
             {
                 roomCreator.CreateOrJoinRoom();
