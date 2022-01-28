@@ -101,7 +101,6 @@ namespace StarterAssets
 
 		private bool _hasAnimator;
 
-        private Vector3 cameraOffset;
 		public Vector2 distance = new Vector2(-0.45f, 6f);
 
 		private void Awake()
@@ -114,7 +113,11 @@ namespace StarterAssets
 		}
 
 		private void Start()
-		{		
+		{
+			GroundLayers |= (1 << LayerMask.NameToLayer("Ground"));
+			var newMask = GroundLayers & ~(1 << LayerMask.NameToLayer("Default"));
+			GroundLayers = newMask;
+
 			CinemachineCameraTarget = GameObject.Find("CameraRoot");
 			_controller = GetComponent<CharacterController>();
 			_input = GetComponent<StarterAssetsInputs>();
@@ -132,12 +135,11 @@ namespace StarterAssets
 			InputActionReference refi = new InputActionReference(); 
 			refi.Set(GetComponent<PlayerInput>().actions.FindAction("Press"));
             refi.action.performed += Action_performed;
-
 		}
 
         private void Action_performed(InputAction.CallbackContext obj)
 		{
-				ThirdPersonCamera = !ThirdPersonCamera;
+			ThirdPersonCamera = !ThirdPersonCamera;
 			StartCoroutine(LerpCameraPosition());
         }
 
@@ -181,21 +183,6 @@ namespace StarterAssets
 				_animator.SetBool(_animIDGrounded, Grounded);
 			}
 		}
-
-
-		private void ChangeCameraMode()
-        {
-            if (ThirdPersonCamera)
-            {
-				componentBase.GetCinemachineComponent<Cinemachine3rdPersonFollow>().CameraDistance = 0f;
-				componentBase.GetCinemachineComponent<Cinemachine3rdPersonFollow>().ShoulderOffset.y = 0.4f;
-			}
-            else
-            {
-				componentBase.GetCinemachineComponent<Cinemachine3rdPersonFollow>().CameraDistance = 6f;
-				componentBase.GetCinemachineComponent<Cinemachine3rdPersonFollow>().ShoulderOffset.y = 0.0f;
-			}
-        }
 
 		private void CameraRotation()
 		{
@@ -260,9 +247,6 @@ namespace StarterAssets
 				// rotate to face input direction relative to camera position
 				transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
 			}
-
-
-			//Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
 
 			Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
 			_controller.Move(targetDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
