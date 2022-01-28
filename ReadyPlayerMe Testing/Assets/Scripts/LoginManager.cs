@@ -7,18 +7,39 @@ using UnityEngine.Networking;
 using UnityEngine.UI;
 
 public class LoginManager : MonoBehaviour
-{
+{    
     public Button loginButton;
+    public Toggle keepSesisonToggle;
+
     public InputField emailField;
     public InputField passwordField;
+
     public CreateAndJoinRooms roomCreator;
+
+    [Header("Canvas")]
     public GameObject loginCanvas;
     public GameObject roomCanvas;
 
-
+    private void Start()
+    {
+        if (PlayerPrefs.HasKey("KeepSession"))
+        {
+            loginCanvas.SetActive(false);
+            Login(PlayerPrefs.GetString("Email"), PlayerPrefs.GetString("Password"));
+        }
+        else
+        {
+            loginCanvas.SetActive(true);
+        }
+    }
     public void Login()
     {
         User user = new User(emailField.text, passwordField.text);
+        StartCoroutine(CallLogin("http://api.datafab.cl/minverso/v1/auth", JsonConverter.Converter.Serialize(user)));
+    }
+    public void Login(string email, string pass)
+    {
+        User user = new User(email, pass);
         StartCoroutine(CallLogin("http://api.datafab.cl/minverso/v1/auth", JsonConverter.Converter.Serialize(user)));
     }
 
@@ -41,8 +62,18 @@ public class LoginManager : MonoBehaviour
             DataHolder.serverData = JsonConvert.DeserializeObject<UserServerData>(request.downloadHandler.text);
             if(DataHolder.serverData.Resp.status == "OK")
             {
-                roomCreator.CreateButton();
-                ChangeCanvas();
+                if(keepSesisonToggle.isOn || PlayerPrefs.HasKey("KeepSession"))
+                {
+                    PlayerPrefs.SetInt("KeepSession", keepSesisonToggle ? 1 : 0);
+                    PlayerPrefs.SetString("Email", emailField.text);
+                    PlayerPrefs.SetString("Password", passwordField.text);
+                }
+                else
+                {                         
+                    PlayerPrefs.DeleteAll();
+                }
+                ChangeCanvas(false, true);
+                roomCreator.CreateButton();               
             }
             else
             {
@@ -50,13 +81,18 @@ public class LoginManager : MonoBehaviour
             }
         }
     }
-
     public void CheckButton() => loginButton.interactable = emailField.text.Length > 0 && passwordField.text.Length > 0;
-
-    public void ChangeCanvas()
+    public void ChangeCanvas(bool login, bool room)
     {
-        loginCanvas.SetActive(!loginCanvas.activeSelf);
-        roomCanvas.SetActive(!roomCanvas.activeSelf);
+        loginCanvas.SetActive(login);
+        roomCanvas.SetActive(room);
+    }
+
+    public void ReLogin()
+    {
+        ChangeCanvas(true, false);
+        PlayerPrefs.DeleteAll();
+        roomCreator.DeleteButtons();
     }
     
 }

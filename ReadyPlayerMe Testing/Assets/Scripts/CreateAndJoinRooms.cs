@@ -11,7 +11,6 @@ public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
     ExitGames.Client.Photon.Hashtable _customProperties = new ExitGames.Client.Photon.Hashtable();
 
     public GameObject button;
-    public GameObject text;
     public Canvas ParentCanvas;
 
     public void CreateOrJoinRoom(string room_name)
@@ -36,20 +35,27 @@ public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
 
     public void CreateButton()
     {
-        Debug.Log(DataHolder.serverData.Resp.rooms.Length);
 
         foreach(var room in DataHolder.serverData.Resp.rooms)
         {
             GameObject newButton = Instantiate(button);
-            newButton.transform.SetParent(ParentCanvas.transform, false);
-
             newButton.GetComponent<Button>().onClick.AddListener(() => CreateOrJoinRoom(room.nombre_room));
             newButton.name = room.nombre_room + "Button";
 
-            GameObject newText = Instantiate(text);
-            newText.transform.SetParent(newButton.transform, false);
-            newText.GetComponent<Text>().text = room.nombre_room;
+            newButton.transform.SetParent(ParentCanvas.transform, false);
+            newButton.transform.SetAsFirstSibling();
+
+            newButton.GetComponentInChildren<Text>().text = room.nombre_room;
         }
 
+    }
+
+    public void DeleteButtons()
+    {
+        foreach(Transform child in ParentCanvas.transform)
+        {
+            if (child.tag != "indelible")
+                Destroy(child.gameObject);
+        }
     }
 }
