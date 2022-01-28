@@ -39,11 +39,6 @@ public class LoginManager : MonoBehaviour
         else
         {
             DataHolder.serverData = JsonConvert.DeserializeObject<UserServerData>(request.downloadHandler.text);
-        //    Debug.Log(DataHolder.serverData);
-            foreach(var a in DataHolder.serverData.Resp.rooms)
-            {
-                Debug.Log("Esta es la Id de las rooms: " + a.id_room);
-            }
             if(DataHolder.serverData.Resp.status == "OK")
             {
                 roomCreator.CreateButton();

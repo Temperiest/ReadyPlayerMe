@@ -14,15 +14,12 @@ public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
     public GameObject text;
     public Canvas ParentCanvas;
 
-    public void CreateOrJoinRoom(string name)
+    public void CreateOrJoinRoom(string room_name)
     {
-      //  Debug.Log("Esta es el nombre que se recibe: " + name);
-       // Debug.Log("Este es el largo de los cuartos: " + DataHolder.serverData.Resp.rooms.Length);
-
         _customProperties["Nickname"] = DataHolder.serverData.Resp.id_user;
         PhotonNetwork.LocalPlayer.CustomProperties = _customProperties;
         PhotonNetwork.LocalPlayer.NickName = DataHolder.serverData.Resp.id_user;
-        PhotonNetwork.JoinOrCreateRoom(name, new RoomOptions(), TypedLobby.Default);//Se debe cambiar por la informacion del boton
+        PhotonNetwork.JoinOrCreateRoom(room_name, new RoomOptions(), TypedLobby.Default);
     }
 
     public override void OnJoinedRoom()
@@ -39,17 +36,20 @@ public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
 
     public void CreateButton()
     {
-        for (int i = 0; i < DataHolder.serverData.Resp.rooms.Length; i++)
+        Debug.Log(DataHolder.serverData.Resp.rooms.Length);
+
+        foreach(var room in DataHolder.serverData.Resp.rooms)
         {
-            //Debug.Log("Este es el largo de DataHolder: " + DataHolder.serverData.Resp.rooms.Length);
             GameObject newButton = Instantiate(button);
             newButton.transform.SetParent(ParentCanvas.transform, false);
-            Debug.Log("Este es el nombre del cuarto" + DataHolder.serverData.Resp.rooms[i].nombre_room);
-            newButton.GetComponent<Button>().onClick.AddListener(()=> CreateOrJoinRoom(DataHolder.serverData.Resp.rooms[i].nombre_room));
+
+            newButton.GetComponent<Button>().onClick.AddListener(() => CreateOrJoinRoom(room.nombre_room));
+            newButton.name = room.nombre_room + "Button";
 
             GameObject newText = Instantiate(text);
             newText.transform.SetParent(newButton.transform, false);
-            newText.GetComponent<Text>().text = DataHolder.serverData.Resp.rooms[i].nombre_room;
+            newText.GetComponent<Text>().text = room.nombre_room;
         }
+
     }
 }
