@@ -30,6 +30,7 @@ public class PlayerInitializer : MonoBehaviourPunCallbacks, IPunObservable
             PhotonNetwork.LocalPlayer.SetCustomProperties(_customProperties);
 
             CharacterController controller = gameObject.AddComponent<CharacterController>();
+            controller.minMoveDistance = 0;
             controller.height = playerHeight;
             controller.center = center;
             controller.radius = radius;
