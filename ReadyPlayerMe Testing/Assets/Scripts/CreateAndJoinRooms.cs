@@ -99,10 +99,10 @@ public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
             if(t.gameObject.GetComponent<Button>() != null && !t.CompareTag("indelible"))
             {
                 Debug.Log("entre al primer if");
-                if (cachedRoomList.ContainsKey(t.name))
+                if (cachedRoomList.ContainsKey(t.GetComponentInChildren<Text>().text))
                 {
                     Debug.Log("Entre al segundo if");
-                    t.GetComponent<Button>().interactable = cachedRoomList[t.name].PlayerCount < cachedRoomList[t.name].MaxPlayers;
+                    t.GetComponent<Button>().interactable = cachedRoomList[t.GetComponentInChildren<Text>().text].PlayerCount < cachedRoomList[t.GetComponentInChildren<Text>().text].MaxPlayers;
                     Debug.Log("Este es mi valor: " + t.GetComponent<Button>().interactable);
                 }
             }
