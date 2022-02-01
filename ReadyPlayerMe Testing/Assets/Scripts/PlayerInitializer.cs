@@ -30,6 +30,7 @@ public class PlayerInitializer : MonoBehaviourPunCallbacks, IPunObservable
             PhotonNetwork.LocalPlayer.SetCustomProperties(_customProperties);
 
             CharacterController controller = gameObject.AddComponent<CharacterController>();
+            controller.minMoveDistance = 0;
             controller.height = playerHeight;
             controller.center = center;
             controller.radius = radius;
@@ -61,7 +62,6 @@ public class PlayerInitializer : MonoBehaviourPunCallbacks, IPunObservable
                 stream.SendNext(anim.GetBool(_animIDJump));
                 stream.SendNext(anim.GetBool(_animIDFreeFall));
                 stream.SendNext(anim.GetFloat(_animIDMotionSpeed));
-                Debug.Log("enviando velocidad " + anim.GetFloat(_animIDSpeed));
             }
             else
             {
@@ -70,7 +70,6 @@ public class PlayerInitializer : MonoBehaviourPunCallbacks, IPunObservable
                 anim.SetBool(_animIDJump, (bool)stream.ReceiveNext());
                 anim.SetBool(_animIDFreeFall, (bool)stream.ReceiveNext());
                 anim.SetFloat(_animIDMotionSpeed, (float)stream.ReceiveNext());
-                Debug.Log("recibiendo Speed " + anim.GetFloat(_animIDSpeed));
             }
         }
     }
