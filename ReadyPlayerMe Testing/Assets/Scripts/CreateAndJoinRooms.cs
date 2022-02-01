@@ -27,7 +27,7 @@ public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
         base.OnJoinedRoom();
         if(PhotonNetwork.CurrentRoom.GetPlayer(PhotonNetwork.CurrentRoom.masterClientId).UserId == PhotonNetwork.LocalPlayer.UserId)
         {
-            PhotonNetwork.CurrentRoom.MaxPlayers = (byte)DataHolder.serverData.Resp.GetRoom(PhotonNetwork.CurrentRoom.Name).max_user;
+            PhotonNetwork.CurrentRoom.MaxPlayers = 1;//(byte)DataHolder.serverData.Resp.GetRoom(PhotonNetwork.CurrentRoom.Name).max_user;
             Debug.Log("El numero maximo de usuarios es: " + PhotonNetwork.CurrentRoom.MaxPlayers);
         }
         PhotonNetwork.LoadLevel("Game");
@@ -65,6 +65,7 @@ public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
                 cachedRoomList[info.Name] = info;
             }
         }
+        UpdateButtonCacheList();
     }
     public void CreateButton()
     {
@@ -97,9 +98,12 @@ public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
         {
             if(t.gameObject.GetComponent<Button>() != null && !t.CompareTag("indelible"))
             {
+                Debug.Log("entre al primer if");
                 if (cachedRoomList.ContainsKey(t.name))
                 {
+                    Debug.Log("Entre al segundo if");
                     t.GetComponent<Button>().interactable = cachedRoomList[t.name].PlayerCount < cachedRoomList[t.name].MaxPlayers;
+                    Debug.Log("Este es mi valor: " + t.GetComponent<Button>().interactable);
                 }
             }
         }
