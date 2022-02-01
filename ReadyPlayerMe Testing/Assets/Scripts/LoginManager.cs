@@ -64,7 +64,7 @@ public class LoginManager : MonoBehaviour
             {
                 if(keepSesisonToggle.isOn || PlayerPrefs.HasKey("KeepSession"))
                 {
-                    PlayerPrefs.SetInt("KeepSession", keepSesisonToggle ? 1 : 0);
+                    PlayerPrefs.SetInt("KeepSession", 1);
                     PlayerPrefs.SetString("Email", emailField.text);
                     PlayerPrefs.SetString("Password", passwordField.text);
                 }

@@ -28,7 +28,6 @@ public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
         if(PhotonNetwork.CurrentRoom.GetPlayer(PhotonNetwork.CurrentRoom.masterClientId).UserId == PhotonNetwork.LocalPlayer.UserId)
         {
             PhotonNetwork.CurrentRoom.MaxPlayers = (byte)DataHolder.serverData.Resp.GetRoom(PhotonNetwork.CurrentRoom.Name).max_user;
-            Debug.Log("El numero maximo de usuarios es: " + PhotonNetwork.CurrentRoom.MaxPlayers);
         }
         PhotonNetwork.LoadLevel("Game");
     }
@@ -43,6 +42,7 @@ public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
         else
         {
             Debug.Log("Unexpected error joined room, try again");
+            Debug.Log("Error Code: " + returnCode + " / Error message: " + message);
         }
     }
 
@@ -87,7 +87,7 @@ public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
     {
         foreach(Transform child in ParentCanvas.transform)
         {
-            if (child.tag != "indelible")
+            if (!child.CompareTag("indelible"))
                 Destroy(child.gameObject);
         }
     }
@@ -96,15 +96,9 @@ public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
     {
         foreach(Transform t in ParentCanvas.transform)
         {
-            if(t.gameObject.GetComponent<Button>() != null && !t.CompareTag("indelible"))
+            if (t.gameObject.GetComponent<Button>() != null && !t.CompareTag("indelible") && cachedRoomList.ContainsKey(t.GetComponentInChildren<Text>().text))
             {
-                Debug.Log("entre al primer if");
-                if (cachedRoomList.ContainsKey(t.GetComponentInChildren<Text>().text))
-                {
-                    Debug.Log("Entre al segundo if");
-                    t.GetComponent<Button>().interactable = cachedRoomList[t.GetComponentInChildren<Text>().text].PlayerCount < cachedRoomList[t.GetComponentInChildren<Text>().text].MaxPlayers;
-                    Debug.Log("Este es mi valor: " + t.GetComponent<Button>().interactable);
-                }
+                t.GetComponent<Button>().interactable = cachedRoomList[t.GetComponentInChildren<Text>().text].PlayerCount < cachedRoomList[t.GetComponentInChildren<Text>().text].MaxPlayers;
             }
         }
     }

@@ -1,10 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
-using Photon.Realtime;
-using ExitGames.Client.Photon;
 using Cinemachine;
+
 public class PlayerInitializer : MonoBehaviourPunCallbacks, IPunObservable
 {
     public float playerHeight;
