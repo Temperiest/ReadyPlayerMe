@@ -27,7 +27,7 @@ public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
         base.OnJoinedRoom();
         if(PhotonNetwork.CurrentRoom.GetPlayer(PhotonNetwork.CurrentRoom.masterClientId).UserId == PhotonNetwork.LocalPlayer.UserId)
         {
-            PhotonNetwork.CurrentRoom.MaxPlayers = 1;//(byte)DataHolder.serverData.Resp.GetRoom(PhotonNetwork.CurrentRoom.Name).max_user;
+            PhotonNetwork.CurrentRoom.MaxPlayers = (byte)DataHolder.serverData.Resp.GetRoom(PhotonNetwork.CurrentRoom.Name).max_user;
             Debug.Log("El numero maximo de usuarios es: " + PhotonNetwork.CurrentRoom.MaxPlayers);
         }
         PhotonNetwork.LoadLevel("Game");
