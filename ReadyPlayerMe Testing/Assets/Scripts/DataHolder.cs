@@ -2,6 +2,7 @@ using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 /*
  * Este archivo se utiliza para guardar la informacion del jugador y dar formato a los archijos JSON que entran y salen por el servidor
@@ -53,6 +54,11 @@ public class ServerResp
     public string email;
     public string url_avatar;
     public RoomData[] rooms;
+
+    public RoomData GetRoom(string roomName)
+    {
+        return rooms.Where(obj => obj.nombre_room == roomName).Single();
+    }
 }
 
 [System.Serializable]
@@ -62,4 +68,6 @@ public class RoomData
     public string nombre_room;
     public int id_apli;
     public string nombre_apli;
+    public int max_user;
+
 }

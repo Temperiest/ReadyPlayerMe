@@ -9,6 +9,7 @@ using System;
 public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
 {
     ExitGames.Client.Photon.Hashtable _customProperties = new ExitGames.Client.Photon.Hashtable();
+    private Dictionary<string, RoomInfo> cachedRoomList = new Dictionary<string, RoomInfo>();
 
     public GameObject button;
     public Canvas ParentCanvas;
@@ -24,18 +25,49 @@ public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         base.OnJoinedRoom();
+        if(PhotonNetwork.CurrentRoom.GetPlayer(PhotonNetwork.CurrentRoom.masterClientId).UserId == PhotonNetwork.LocalPlayer.UserId)
+        {
+            PhotonNetwork.CurrentRoom.MaxPlayers = (byte)DataHolder.serverData.Resp.GetRoom(PhotonNetwork.CurrentRoom.Name).max_user;
+            Debug.Log("El numero maximo de usuarios es: " + PhotonNetwork.CurrentRoom.MaxPlayers);
+        }
         PhotonNetwork.LoadLevel("Game");
     }
 
     public override void OnJoinRoomFailed(short returnCode, string message)
     {
         base.OnJoinRoomFailed(returnCode, message);
-        Debug.Log("Unexpected error joined room, try again");
+        if (returnCode == ErrorCode.GameFull)
+        {
+            Debug.Log("Rooms is full, try later");
+        }
+        else
+        {
+            Debug.Log("Unexpected error joined room, try again");
+        }
     }
 
+    public override void OnRoomListUpdate(List<RoomInfo> roomList)
+    {
+        UpdateCachedRoomList(roomList);
+    }
+
+    private void UpdateCachedRoomList(List<RoomInfo> roomList)
+    {
+        for (int i = 0; i < roomList.Count; i++)
+        {
+            RoomInfo info = roomList[i];
+            if (info.RemovedFromList)
+            {
+                cachedRoomList.Remove(info.Name);
+            }
+            else
+            {
+                cachedRoomList[info.Name] = info;
+            }
+        }
+    }
     public void CreateButton()
     {
-
         foreach(var room in DataHolder.serverData.Resp.rooms)
         {
             GameObject newButton = Instantiate(button);
@@ -47,15 +79,29 @@ public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
 
             newButton.GetComponentInChildren<Text>().text = room.nombre_room;
         }
+        UpdateButtonCacheList();
 
     }
-
     public void DeleteButtons()
     {
         foreach(Transform child in ParentCanvas.transform)
         {
             if (child.tag != "indelible")
                 Destroy(child.gameObject);
+        }
+    }
+
+    public void UpdateButtonCacheList()
+    {
+        foreach(Transform t in ParentCanvas.transform)
+        {
+            if(t.gameObject.GetComponent<Button>() != null && !t.CompareTag("indelible"))
+            {
+                if (cachedRoomList.ContainsKey(t.name))
+                {
+                    t.GetComponent<Button>().interactable = cachedRoomList[t.name].PlayerCount < cachedRoomList[t.name].MaxPlayers;
+                }
+            }
         }
     }
 }
