@@ -32,7 +32,7 @@ public class PlayerInitializer : MonoBehaviourPunCallbacks, IPunObservable
             controller.center = center;
             controller.radius = radius;
             var TPC = gameObject.AddComponent<StarterAssets.ThirdPersonController>();
-            TPC.GroundLayers |= (1 << LayerMask.NameToLayer("Default"));
+            TPC.GroundLayers |= (1 << LayerMask.NameToLayer("Ground"));
         }
 
         var cinemachineVirtualCameraObject = GameObject.Find("PlayerFollowCamera");
