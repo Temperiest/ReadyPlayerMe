@@ -22,7 +22,7 @@ public class PlayerInitializer : MonoBehaviourPunCallbacks, IPunObservable
     {
         if (GetComponent<PhotonView>().IsMine)
         {
-              ExitGames.Client.Photon.Hashtable _customProperties = PhotonNetwork.LocalPlayer.CustomProperties;
+            ExitGames.Client.Photon.Hashtable _customProperties = PhotonNetwork.LocalPlayer.CustomProperties;
             _customProperties["URL"] = DataHolder.serverData.Resp.url_avatar + "+" + DataHolder.serverData.Resp.id_user;
             PhotonNetwork.LocalPlayer.SetCustomProperties(_customProperties);
 
